@@ -1,0 +1,312 @@
+{
+  "itinerari": [
+    {
+      "id": "magnani_passeggiata",
+      "nome": "Nannarella: il cuore di Roma tra marmi e sampietrini",
+      "sottotitolo": "Un itinerario viscerale con Anna Magnani",
+      "personaggio": {
+        "nome": "Anna Magnani",
+        "anni": "1908-1973",
+        "professione": "Attrice",
+        "nazionalita": "Italiana",
+        "biografia_breve": "Attrice simbolo del neorealismo italiano, celebre per la sua intensità in pellicole come: Roma città aperta (1945), L'Onorevole Angelina (1947) e Risate di gioia (1960). Le sue interpretazioni incarnano lo spirito autentico e la forza viscerale della città eterna.",
+        "immagine": "assets/personaggi/magnani.jpg",
+        "opere_correlate": [
+          "Roma citta' aperta (1945)",
+          "L'Onorevole Angelina (1947)",
+          "Risate di gioia (1960)"
+        ]
+      },
+      "tema": "Cinema Neorealista - Storia e Vita",
+      "categoria": "Arte e Cultura",
+      "durata_totale_ore": 12,
+      "difficolta": "facile",
+      "immagine_copertina": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=400&h=200&auto=format&fit=crop",
+      "distanza_totale_km": 4.0,
+      "periodo_consigliato": "Primavera/Autunno (temperature miti)",
+      "stagione_migliore": ["marzo", "aprile", "maggio", "settembre", "ottobre"],
+      "descrizione": "Segui i passi dell'indimenticabile Anna Magnani attraverso i luoghi più iconici della sua Roma. Ogni tappa corrisponde a un frammento della sua vita, vissuto nel cuore della città che l'attrice ha immortalato. Un'esperienza che unisce cinema, storia e anima.",
+      "note_logistiche": "Iniziare al mattino richiede energia romana. Portare acqua, cappello e scarpe comode. Prevedere pause caffè tra le tappe. Palazzo Altieri è una residenza privata (si ammira dall'esterno).",
+      "accessibilita": "Tutte le tappe sono accessibili. Mezzi pubblici per Piazza della Repubblica (Naiadi), a piedi per Ghetto, Altieri e Minerva.",
+      "costo_stimato": "Gratuito (passeggiata in esterni storici)",
+      "tappe": [
+        {
+          "numero": 1,
+          "poi_id": "portico_ottavia",
+          "orario_consigliato": "07:30",
+          "momento_giornata": "alba",
+          "durata_visita_min": 90,
+          "coordinate": [41.8925, 12.4785],
+          "nome": "Portico d'Ottavia",
+          "descrizione_breve": "Anna era l'incarnazione della donna del popolo romana: fiera e pronta a lottare. Il Portico d'Ottavia rappresenta la sua anima verace, dove ha ambientato L'Onorevole Angelina, guidando la rivolta delle donne del quartiere.",
+          "indicazioni_arrivo": "Tram 8 fermata Arenula/Cairoli, oppure a piedi da Largo Argentina. Iniziare dal cuore del Ghetto storico.",
+          "esperienza_culturale": {
+            "musica": {
+              "movimento": "L'Onorevole Angelina",
+              "video": "OnorevoleAngelina.mp4",
+              "compositore": "Luigi Zampa (Regia)",
+              "durata_sec": 71,
+              "tonalita": "Rumori ambientali e voce",
+              "organico": "Serrande metalliche, voci popolari",
+              "anno_composizione": 1947,
+              "descrizione_musicale": "La voce di Anna squarcia il silenzio delle rovine. Un frammento da 'l'Onorevole Angelina' in cui l'attrice difende con le unghie e con i denti la sua gente, mescolato al risveglio dei fornai storici del Ghetto.",
+              "spotify_url": "",
+              "youtube_url": "https://www.youtube.com/embed/4QyX2n614IQ",
+              "note_ascolto": "Ascoltare guardando l'attività mattutina dei forni e dei ristoranti del quartiere ebraico."
+            },
+            "letteratura": {
+              "citazione": "Roma è l'unica città al mondo in cui si sentono i passi della storia mischiarsi a quelli della gente.",
+              "autore": "Pier Paolo Pasolini",
+              "opera": "Scritti Corsari",
+              "anno": 1975,
+              "contesto": "Pasolini descrive la stratificazione umana di Roma, tema che risuona con la passeggiata della Magnani."
+            },
+            "atmosfera": {
+              "momento": "mattino",
+              "luce": "luce radente sui ruderi antichi",
+              "suoni_ambiente": [
+                "serrande dei forni che si alzano",
+                "vociare dei commercianti",
+                "passi sui sampietrini"
+              ],
+              "temperatura_stimata": "15-18°C",
+              "affollamento": "moderato (orario di mercato locale)",
+              "consiglio_fotografico": "Luce perfetta per ritrarre i contrasti tra le rovine romane e la vita quotidiana del Ghetto.",
+              "emozione_target": "Resistenza, fierezza, appartenenza"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Architettura Romana Antica",
+              "architetti": ["Augusto (committente)"],
+              "anno_costruzione": "27 a.C.",
+              "committente": "Imperatore Augusto in onore della sorella Ottavia",
+              "descrizione": "Complesso monumentale che incornicia l'ingresso al quartiere ebraico, simbolo di una Roma viva e stratificata."
+            }
+          },
+          "storia": "Il Portico d'Ottavia fu ricostruito in epoca severiana e nel medioevo ospitò la pescheria di Roma. È da sempre il cuore pulsante e popolare del Ghetto ebraico.",
+          "curiosita": "Nonostante frequentasse i salotti intellettuali, la Magnani sullo schermo era l'incarnazione assoluta della donna del popolo, verace e combattiva proprio come gli abitanti storici di questi vicoli.",
+          "metadata": {
+            "accessibilita": "accesso pedonale gratuito",
+            "orari_standard": "24/7",
+            "servizi": ["ristoranti tipici", "panetterie storiche"]
+          }
+        },
+        {
+          "numero": 2,
+          "poi_id": "fontana_naiadi",
+          "orario_consigliato": "11:00",
+          "momento_giornata": "pieno mattino",
+          "durata_visita_min": 60,
+          "coordinate": [41.9028, 12.4984],
+          "nome": "Fontana delle Naiadi",
+          "descrizione_breve": "Questa piazza è il set di Risate di gioia (1960). In una scena iconica, la Magnani stanca e delusa si lava i piedi scalzi nell'immensa fontana, schiacciata dall'indifferenza di una città in festa.",
+          "indicazioni_arrivo": "Dal Ghetto: camminata verso Via Nazionale fino a Piazza della Repubblica, oppure Bus H.",
+          "tempo_spostamento_da_tappa_precedente": {
+            "a_piedi": "25 min",
+            "metro": "15 min (Bus)",
+            "distanza_km": 2.0
+          },
+          "esperienza_culturale": {
+            "musica": {
+              "movimento": "La Diva Solitaria", 
+              "compositore": "Mario Monicelli (Regia)",
+              "durata_sec": 65,
+              "tonalita": "Malinconica",
+              "descrizione_musicale": "L'acqua prepotente delle Naiadi fa da contrasto alla solitudine della diva. Una scena agrodolce in cui Nannarella siede ai piedi della fontana, mentre Roma festeggia il Capodanno ignorando i suoi drammi.",
+              "strumenti_protagonisti": ["scroscio d'acqua", "pianoforte", "voce"],
+              "carattere": "Agrodolce, malinconico, solitario",
+              "spotify_url": "",
+             "youtube_url": "https://www.youtube.com/embed/I2y8T2G3Jlw",
+              "note_ascolto": "Ascoltare concentrandosi sul rumore dell'acqua che copre il caos della piazza."
+            },
+            "letteratura": {
+              "citazione": "Le Naiadi lucenti sfidano la morale con la stessa disinvoltura con cui l'acqua sfida la gravità.",
+              "autore": "Cronache dell'epoca",
+              "opera": "Articoli sul Corriere",
+              "anno": 1901,
+              "contesto": "All'inaugurazione, le sculture nude generarono grande scandalo nella Roma papalina."
+            },
+            "atmosfera": {
+              "momento": "pieno mattino",
+              "luce": "brillante e nitida sull'acqua",
+              "suoni_ambiente": [
+                "traffico intenso di Piazza della Repubblica",
+                "getto d'acqua potente della fontana"
+              ],
+              "temperatura_stimata": "20-23°C",
+              "affollamento": "alto (snodo cittadino)",
+              "consiglio_fotografico": "Inquadrare la maestosità della piazza cercando di isolare un dettaglio solitario dell'acqua o delle sculture.",
+              "emozione_target": "Solitudine, disillusione, grandezza"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Eclettismo / Liberty",
+              "scultore": "Mario Rutelli",
+              "anno_costruzione": "1901",
+              "committente": "Comune di Roma",
+              "materiali": "Bronzo e travertino",
+              "altezza_m": 8,
+              "descrizione": "Quattro ninfe in pose sensuali sorreggono mostri acquatici, dominando una delle piazze più ampie di Roma."
+            }
+          },
+          "storia": "Costruita originariamente da Papa Pio IX, la fontana assunse il suo aspetto attuale nel 1901 con le statue di Rutelli, scatenando reazioni contrastanti.",
+          "curiosita": "L'impatto di Anna con l'industria cinematografica internazionale le portò un immenso successo, ma non riuscì mai a cancellare quella sua vena di profonda e inconsolabile malinconia.",
+          "metadata": {
+            "accessibilita": "gratuito, sempre accessibile (al centro di una rotonda)",
+            "orari_standard": "24/7",
+            "servizi": ["metro A Repubblica", "bar sotto i portici"]
+          }
+        },
+        {
+          "numero": 3,
+          "poi_id": "palazzo_altieri",
+          "orario_consigliato": "15:30",
+          "momento_giornata": "primo pomeriggio",
+          "durata_visita_min": 60,
+          "coordinate": [41.8966, 12.4788],
+          "nome": "Palazzo Altieri",
+          "descrizione_breve": "Questo non era un set, ma la sua vera vita. Nell'attico di questo palazzo barocco si isolava dalla Dolce Vita, organizzava cene intime e curava decine di gatti randagi. Era la sua fortezza inaccessibile.",
+          "indicazioni_arrivo": "Da Piazza della Repubblica: Metro A fino a Termini, poi Bus 40 o 64 fino a Piazza del Gesù.",
+          "tempo_spostamento_da_tappa_precedente": {
+            "a_piedi": "25 min",
+            "distanza_km": 1.9
+          },
+          "esperienza_culturale": {
+            "musica": {
+              "movimento": "Il Rifugio della Regina",
+              "audio_url": "Nannarella.m4a",
+              "compositore": "Ambiente / Intervista originale",
+              "durata_sec": "176",
+              "tonalita": "Intima",
+              "descrizione_musicale": "L'emozionante confessione di Anna e il celebre omaggio di Federico Fellini, che la definisce simbolo stesso della città: 'Lupa e vestale, aristocratica e stracciona'. L'audio si chiude con il suo indimenticabile e ironico saluto al regista prima di chiudersi nel suo portone per ritrovare la pace.",
+              "citazioni_famose": "La fatica di essere un'attrice spiegata a bassa voce.",
+              "carattere": "Intimo, privato, protettivo",
+              "spotify_url": "",
+              "youtube_url": "",
+              "note_ascolto": "Ascoltare guardando le finestre dell'ultimo piano del palazzo, cercando un senso di distacco dal rumore di strada."
+            },
+            "letteratura": {
+              "citazione": "Non togliermi neppure una ruga. Le ho pagate tutte care.",
+              "autore": "Anna Magnani",
+              "opera": "Intervista",
+              "anno": 1965,
+              "contesto": "Celebre frase rivolta al suo truccatore, espressione massima della sua autenticità."
+            },
+            "atmosfera": {
+              "momento": "primo pomeriggio",
+              "luce": "luce calda che taglia i vicoli stretti",
+              "suoni_ambiente": [
+                "rumore ovattato del traffico su Via del Plebiscito",
+                "campane della Chiesa del Gesù",
+                "miagolii in lontananza"
+              ],
+              "temperatura_stimata": "25-28°C",
+              "affollamento": "medio",
+              "consiglio_fotografico": "Fotografare i dettagli del cornicione del palazzo e i gatti che spesso si aggirano per la piazza.",
+              "emozione_target": "Intimità, protezione, riflessione"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Barocco",
+              "architetto": "Giovanni Antonio De Rossi",
+              "anno_costruzione": "1650-1655",
+              "committente": "Famiglia Altieri (Papa Clemente X)",
+              "dimensioni": "Intero isolato su Piazza del Gesù",
+              "descrizione": "Uno dei palazzi più imponenti di Roma. L'attico all'ultimo piano fu la lussuosa casa dove Anna scelse di vivere lontana dai paparazzi."
+            }
+          },
+          "storia": "Costruito per la famiglia di Papa Clemente X, è un capolavoro del barocco civile romano, con interni riccamente decorati e scalonati monumentali.",
+          "curiosita": "L'attico della Magnani a Palazzo Altieri era famoso per le cene intime con pochi intellettuali selezionati, come Pier Paolo Pasolini, e per essere il rifugio sicuro dei gatti di Roma.",
+          "metadata": {
+            "accessibilita": "esterno liberamente visibile, interni privati",
+            "orari_standard": "24/7 (per l'esterno)",
+            "servizi": ["fermate bus", "bar nelle vicinanze"]
+          }
+        },
+        {
+          "numero": 4,
+          "poi_id": "piazza_minerva",
+          "orario_consigliato": "18:30",
+          "momento_giornata": "tramonto",
+          "durata_visita_min": 60,
+          "coordinate": [41.8978, 12.4778],
+          "nome": "Piazza della Minerva",
+          "descrizione_breve": "È il palcoscenico del suo addio. Il 28 settembre 1973 la chiesa di Santa Maria sopra Minerva accolse i suoi funerali: un oceano di persone bloccò il centro di Roma per piangerla.",
+          "indicazioni_arrivo": "Da Palazzo Altieri: 5 minuti a piedi attraversando Via della Pigna e Piazza della Minerva.",
+          "tempo_spostamento_da_tappa_precedente": {
+            "a_piedi": "5 min",
+            "metro_piedi": "5 min",
+            "distanza_km": 0.4
+          },
+          "esperienza_culturale": {
+            "musica": {
+              "movimento": "L'Abbraccio Finale",
+              "compositore": "Archivio Luce / F. Fellini",
+              "durata_sec": 120,
+              "tonalita": "Solenne",
+              "descrizione_musicale": "L'audio originale del Cinegiornale del 1973. Un applauso oceanico, spontaneo e infinito riempie la piazza all'uscita del feretro. È Roma che restituisce ad Anna tutto l'amore ricevuto, chiudendo la scena con il suo ultimo saluto cinematografico: 'No, so' stanca. Ciao. Buonanotte'.",
+              "carattere": "Catartico, commovente, eterno",
+              "citazioni_famose": "L'ultimo saluto in 'Roma' (1972)",
+              "spotify_url": "",
+              "youtube_url": "https://www.youtube.com/embed/XvDaN-jolxw", 
+              "note_ascolto": "Stare al centro della piazza al calar del sole, chiudere gli occhi e immaginare la folla del '73."
+            },
+            "letteratura": {
+              "citazione": "Ha gridato, ha pianto, ha riso, ha amato, come nessuna. L'abbiamo persa, ma Roma non perde mai i suoi figli più veri.",
+              "autore": "Eduardo De Filippo",
+              "opera": "Ricordo di Anna",
+              "anno": 1973,
+              "contesto": "Il sentimento generale di intellettuali e popolo romano al momento della sua scomparsa."
+            },
+            "atmosfera": {
+              "momento": "tramonto",
+              "luce": "dorata, ombre che si allungano sull'elefantino di Bernini",
+              "suoni_ambiente": [
+                "brusio dei turisti",
+                "rintocchi di Santa Maria sopra Minerva",
+                "passi silenziosi"
+              ],
+              "temperatura_stimata": "18-22°C (temperatura ideale)",
+              "affollamento": "medio-alto",
+              "vista_panoramica": "L'obelisco, la facciata della chiesa, l'elefantino",
+              "consiglio_fotografico": "Catturare l'elefantino di Bernini in controluce al calar del sole.",
+              "emozione_target": "Gratitudine, catarsi, memoria"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Gotico / Barocco",
+              "architetto": "Gian Lorenzo Bernini (per l'Elefantino)",
+              "anno_costruzione": "1667",
+              "committente": "Papa Alessandro VII",
+              "descrizione": "Piazza incastonata dietro il Pantheon, famosa per l'unica chiesa gotica di Roma e per il 'Pulcin della Minerva'."
+            }
+          },
+          "storia": "La Basilica fu scelta per il funerale perché la storica Piazza del Popolo non sarebbe mai bastata a contenere l'affetto dei romani accorsi per salutarla.",
+          "curiosita": "L'applauso scrosciante che accompagnò il feretro fuori dalla chiesa divenne un precedente storico: da quel giorno, applaudire ai funerali in Italia è diventato un segno di profondo rispetto e amore.",
+          "metadata": {
+            "accessibilita": "piazza pubblica sempre aperta, chiesa a ingresso gratuito",
+            "orari_standard": "Chiesa: 07:30-19:00",
+            "servizi": ["gelaterie storiche", "negozi artigiani vicini"]
+          }
+        }
+      ],
+      "mappa_percorso": {
+        "polyline_encoded": "esempio_encoded_string",
+        "colore_percorso": "#b71c1c",
+        "stile_linea": "dashed"
+      },
+      "consigli_pratici": [
+        "Portare fazzoletti per l'emozionante audio finale in Piazza della Minerva",
+        "Scarpe comode obbligatorie (3.5 km a piedi totali tra i sanpietrini)",
+        "Macchina fotografica per catturare la luce dei vicoli",
+        "Cuffie di buona qualità per non farsi coprire dal rumore del traffico",
+        "Assaggiare un tipico carciofo alla giudia alla fine della Tappa 1"
+      ],
+      "migliore_periodo_anno": "Marzo-Maggio o Settembre-Ottobre (luce migliore, temperature miti)",
+      "sconsigliato": ["Piena estate (troppo caldo)", "Giorni di forte pioggia (sampietrini scivolosi)"],
+      "cosa_portare": [
+        "Smartphone con i file audio caricati",
+        "Cuffie/auricolari",
+        "Bottiglia acqua",
+        "Cappello",
+        "Un fazzoletto per l'emozione della fine"
+      ]
+    }
+  ]
+}

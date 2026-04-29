@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nannarella: il cuore di Roma tra marmi e sampietrini</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Georgia', serif; 
+            background: #e8e6e1; /* Grigio-beige caldo "pellicola invecchiata" */
+            overflow-x: hidden;
+        }
+        
+        /* === NAVIGATION BAR === */
+        #navbar {
+            background: linear-gradient(135deg, #2a2a2a 0%, #111111 100%); /* Quasi nero */
+            color: #f0f0f0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border-bottom: 3px solid #8b3a3a; /* Rosso ruggine antico */
+        }
+        
+        #navbar h1 {
+            font-size: 1.5em;
+            color: #d9b382; /* Color oro/seppia */
+            letter-spacing: 1px;
+        }
+        
+        #nav-buttons button {
+            background: rgba(139, 58, 58, 0.8); /* Rosso ruggine traslucido */
+            color: #fdfdfd;
+            border: 1px solid #8b3a3a;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+        }
+        
+        #nav-buttons button:hover {
+            background: #8b3a3a;
+            box-shadow: 0 0 10px rgba(139, 58, 58, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* === VIEWS === */
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        /* === HOME VIEW (Selezione Itinerario) === */
+        #home-view {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        #home-view h2 {
+            text-align: center;
+            color: #1a1a1a;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        #home-view .subtitle {
+            text-align: center;
+            color: #5c4d42; /* Marrone grigiastro */
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .itinerari-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .itinerario-card {
+            background: #fdfdfc;
+            border-radius: 8px; /* Angoli meno arrotondati, più rigorosi */
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid #dcd7d0;
+        }
+        
+        .itinerario-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            border-color: #8b3a3a;
+        }
+        
+        .card-image {
+            height: 450px; /* Altezza regolata per non esagerare */
+            background-size: cover;
+            background-position: top center;
+            position: relative;
+            filter: sepia(40%) contrast(110%); /* Effetto foto d'epoca */
+            transition: filter 0.5s ease;
+            border-bottom: 4px solid #8b3a3a;
+        }
+        
+        .itinerario-card:hover .card-image {
+            filter: sepia(10%) contrast(120%);
+        }
+        
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #2a2a2a;
+            color: #d9b382;
+            padding: 6px 16px;
+            border-radius: 2px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid #d9b382;
+        }
+        
+        .card-content {
+            padding: 30px;
+        }
+        
+        .card-content h3 {
+            color: #1a1a1a;
+            font-size: 1.7em;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e8e6e1;
+            padding-bottom: 10px;
+        }
+        
+        .card-subtitle {
+            color: #8b3a3a;
+            font-size: 1.05em;
+            margin-bottom: 18px;
+            font-weight: bold;
+        }
+        
+        .card-description {
+            color: #4a4a4a;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2a2a2a;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        
+        .card-button {
+            width: 100%;
+            padding: 14px;
+            background: #2a2a2a;
+            color: #f0f0f0;
+            border: 1px solid #111;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: normal;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .card-button:hover {
+            background: #8b3a3a;
+            border-color: #8b3a3a;
+            letter-spacing: 1px;
+        }
+        
+        /* === ITINERARY VIEW === */
+        #itinerary-view {
+            display: flex;
+            height: calc(100vh - 65px);
+        }
+        
+        /* Timeline Sidebar */
+        #timeline-sidebar {
+            width: 320px; /* Leggermente più largo */
+            background: #2a2a2a; /* Grigio molto scuro */
+            color: #e8e6e1;
+            padding: 25px 20px;
+            overflow-y: auto;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        #timeline-title {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #555;
+            color: #d9b382;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        #progress-bar {
+            background: #111;
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        #progress-fill {
+            background: #8b3a3a;
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .timeline-item {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            border-left: 3px solid #444;
+            background: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            background: #3a3a3a;
+            border-left-color: #d9b382;
+        }
+        
+        .timeline-item.completed {
+            border-left-color: #5c4d42;
+            background: #222;
+            color: #888;
+        }
+        
+        .timeline-item.current {
+            border-left-color: #8b3a3a;
+            background: #1a1a1a;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        .timeline-item.upcoming {
+            border-left-color: #444;
+            opacity: 0.7;
+        }
+        
+        .timeline-icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            filter: sepia(100%) hue-rotate(340deg) saturate(50%); /* Tonalità vintage sulle icone */
+        }
+        
+        .timeline-time {
+            font-size: 0.85em;
+            color: #d9b382;
+            letter-spacing: 1px;
+        }
+        
+        .timeline-name {
+            font-size: 1.05em;
+            margin-top: 6px;
+            font-weight: bold;
+        }
+        
+        .timeline-duration {
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        
+        /* Main Content */
+        #itinerary-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #map-container {
+            flex: 1.2; /* Mappa prende un po' più spazio */
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            filter: grayscale(40%) sepia(20%); /* Leggero filtro vintage sulla mappa */
+        }
+        
+        /* Dettagli Tappa */
+        #tappa-details {
+            flex: 0.8; /* Dettagli prendono un po' meno spazio rispetto alla mappa */
+            background: #fdfdfc;
+            padding: 35px 40px;
+            overflow-y: auto;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            border-top: 4px solid #8b3a3a;
+        }
+        
+        #tappa-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #dcd7d0;
+        }
+        
+        #tappa-numero {
+            font-size: 3.5em;
+            color: #e8e6e1; /* Numero molto grande ma chiaro, in background */
+            font-weight: bold;
+            text-shadow: 2px 2px 0px #dcd7d0;
+            line-height: 1;
+        }
+        
+        #tappa-nome {
+            flex: 1;
+            margin: 0 25px;
+        }
+        
+        #tappa-nome h2 {
+            color: #1a1a1a;
+            font-size: 2.2em;
+            letter-spacing: 0.5px;
+        }
+        
+        #tappa-nome .descrizione-breve {
+            color: #555;
+            font-style: italic;
+            margin-top: 5px;
+            font-size: 1.1em;
+        }
+        
+        #tappa-orario {
+            text-align: right;
+            background: #2a2a2a;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+        
+        #tappa-orario .time {
+            font-size: 1.4em;
+            color: #d9b382;
+        }
+        
+        #tappa-orario .moment {
+            font-size: 0.8em;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+        
+        /* Esperienza Culturale */
+        .esperienza-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f4ede8;
+            border-radius: 4px;
+            border-left: 5px solid #8b3a3a; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+        
+        .esperienza-section h3 {
+            color: #2a2a2a;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+            border-bottom: 1px solid #dcd7d0;
+            padding-bottom: 8px;
+        }
+        
+        .esperienza-section p {
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        /* Audio Player */
+        .music-player {
+            background: #2a2a2a; /* Scuro per contrastare */
+            padding: 25px;
+            border-radius: 4px;
+            color: #f0f0f0;
+            margin: 25px 0;
+            border-left: 5px solid #d9b382;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .music-player h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #d9b382;
+        }
+        
+        .music-player audio {
+            width: 100%;
+            margin-bottom: 15px;
+            outline: none; /* Rimuove bordo default */
+        }
+        
+        .music-description {
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #ccc;
+        }
+        
+        /* Citazione Letteraria */
+        .citazione-box {
+            background: #fff; 
+            border: 1px solid #dcd7d0;
+            border-left: 5px solid #5c4d42; /* Marrone scuro */
+            padding: 25px;
+            border-radius: 4px;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .citazione-box::before {
+            content: '"';
+            font-size: 4em;
+            color: #f4ede8;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: serif;
+        }
+        
+        .citazione-text {
+            font-size: 1.2em;
+            font-style: italic;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .citazione-author {
+            text-align: right;
+            color: #8b3a3a;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+        
+        .citazione-author em {
+            color: #777;
+            font-weight: normal;
+        }
+        
+        /* Atmosfera */
+        .atmosfera-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .atmosfera-item {
+            background: #fff;
+            padding: 18px 15px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #e8e6e1;
+            transition: transform 0.2s ease;
+        }
+        
+        .atmosfera-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .atmosfera-item .icon {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            filter: grayscale(30%);
+        }
+        
+        .atmosfera-item .label {
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .atmosfera-item .value {
+            font-weight: bold;
+            color: #1a1a1a;
+            font-size: 1.1em;
+        }
+        
+        /* Navigation Buttons */
+        #tappa-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+            border-top: 1px solid #dcd7d0;
+            padding-top: 25px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 16px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 1.05em;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .nav-btn.prev {
+            background: #f4ede8;
+            color: #555;
+            border-color: #dcd7d0;
+        }
+        
+        .nav-btn.prev:hover {
+            background: #e8e6e1;
+            color: #111;
+        }
+        
+        .nav-btn.next {
+            background: #2a2a2a;
+            color: #d9b382;
+        }
+        
+        .nav-btn.next:hover {
+            background: #111;
+            color: #fff;
+            transform: translateX(4px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #e8e6e1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #8b3a3a;
+            border-radius: 0; /* Squadrata, più vintage */
+        }
+        
+        #timeline-sidebar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #itinerary-view {
+                flex-direction: column;
+            }
+            
+            #timeline-sidebar {
+                width: 100%;
+                height: 160px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                display: flex;
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            #timeline-title {
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+            }
+            
+            #timeline-items {
+                display: flex;
+                gap: 15px;
+            }
+            
+            .timeline-item {
+                flex: 0 0 200px;
+                margin-bottom: 0;
+                border-left: none;
+                border-top: 3px solid #444;
+            }
+            
+            .timeline-item.current {
+                border-top-color: #8b3a3a;
+                border-left: none;
+            }
+            
+            .itinerari-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            #tappa-details {
+                padding: 20px;
+            }
+            
+            #tappa-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            #tappa-numero {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                font-size: 4em;
+                opacity: 0.3;
+            }
+            
+            #tappa-nome {
+                margin: 15px 0;
+            }
+            
+            #tappa-orario {
+                align-self: flex-start;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar">
+        <h1>🎬 Nannarella</h1>
+        <div id="nav-buttons">
+            <button onclick="showView('home')">Indietro</button>
+            <button id="back-to-itinerary-btn" onclick="showView('itinerary')" style="display:none;">Torna all'Itinerario</button>
+        </div>
+    </div>
+    
+    <div id="home-view" class="view active">
+        <h2>Nannarella: il cuore di Roma tra marmi e sampietrini</h2>
+        <p class="subtitle">Un itinerario viscerale con Anna Magnani</p>
+        
+        <div id="itinerari-container" class="itinerari-grid">
+            </div>
+    </div>
+    
+    <div id="itinerary-view" class="view">
+        <div id="timeline-sidebar">
+            <div id="timeline-title">La Passeggiata</div>
+            <div id="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+            <div id="timeline-items">
+                </div>
+        </div>
+        
+        <div id="itinerary-content">
+            <div id="map-container">
+                <div id="map"></div>
+            </div>
+            
+            <div id="tappa-details">
+                <div id="tappa-header">
+                    <div id="tappa-numero"></div>
+                    <div id="tappa-nome">
+                        <h2></h2>
+                        <p class="descrizione-breve"></p>
+                    </div>
+                    <div id="tappa-orario">
+                        <div class="time"></div>
+                        <div class="moment"></div>
+                    </div>
+                </div>
+                
+                <div id="tappa-content">
+                    </div>
+                
+                <div id="tappa-navigation">
+                    <button class="nav-btn prev" onclick="previousTappa()">← Tappa Precedente</button>
+                    <button class="nav-btn next" onclick="nextTappa()">Tappa Successiva →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let itinerariData = null;
+        let currentItinerario = null;
+        let currentTappaIndex = 0;
+        let map = null;
+        let markers = [];
+        let routeLine = null;
+        
+        const momentIcons = {
+            'alba': '☕',
+            'mattino': '☀️',
+            'pieno mattino': '⛲',
+            'mezzogiorno': '🍽️',
+            'primo pomeriggio': '🐈',
+            'pomeriggio': '🐈',
+            'tramonto': '🌅',
+            'sera': '🌙'
+        };
+        
+        async function init() {
+            await loadItinerariData();
+            renderItinerariCards();
+        }
+        
+        async function loadItinerariData() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error('File non trovato');
+                const data = await response.json();
+                itinerariData = data.itinerari;
+            } catch (error) {
+                console.log('Utilizzo dati di fallback interni');
+                itinerariData = getEmbeddedItinerari();
+            }
+        }
+        
+        function getEmbeddedItinerari() {
+            return [
+                {
+                  "id": "magnani_passeggiata",
+                  "nome": "Nannarella: il cuore di Roma tra marmi e sampietrini",
+                  "sottotitolo": "Un itinerario viscerale con Anna Magnani",
+                  "personaggio": {
+                    "nome": "Anna Magnani",
+                    "anni": "1908-1973",
+                    "professione": "Attrice",
+                    "nazionalita": "Italiana",
+                    "biografia_breve": "Attrice simbolo del neorealismo italiano, celebre per la sua intensità in pellicole come: Roma città aperta (1945), L'Onorevole Angelina (1947) e Risate di gioia (1960). Le sue interpretazioni incarnano lo spirito autentico e la forza viscerale della città eterna.",
+                    "immagine": "assets/personaggi/magnani.jpg",
+                    "opere_correlate": [
+                      "Roma citta' aperta (1945)",
+                      "L'Onorevole Angelina (1947)",
+                      "Risate di gioia (1960)"
+                    ]
+                  },
+                  "tema": "Cinema Neorealista",
+                  "categoria": "Arte e Cultura",
+                  "durata_totale_ore": 4,
+                  "difficolta": "facile",
+                  "immagine_copertina": "https://i.pinimg.com/736x/70/cf/4f/70cf4ff1f7d54be96032309e181ad8cf.jpg",
+                  "distanza_totale_km": 3.5,
+                  "periodo_consigliato": "Primavera/Autunno",
+                  "stagione_migliore": ["marzo", "aprile", "maggio", "settembre", "ottobre"],
+                  "descrizione": "Segui i passi dell'indimenticabile Anna Magnani attraverso i luoghi più iconici della sua Roma. Ogni tappa corrisponde a un frammento della sua vita, vissuto nel cuore della città che l'attrice ha immortalato. Un'esperienza che unisce cinema, storia e anima.",
+                  "note_logistiche": "Iniziare al mattino richiede energia romana. Portare acqua, cappello e scarpe comode.",
+                  "accessibilita": "Tutte le tappe sono accessibili. Mezzi pubblici per Piazza della Repubblica, a piedi il resto.",
+                  "costo_stimato": "Gratuito",
+                  "tappe": [
+                    {
+                      "numero": 1,
+                      "poi_id": "portico_ottavia",
+                      "orario_consigliato": "09:30",
+                      "momento_giornata": "mattino",
+                      "durata_visita_min": 45,
+                      "coordinate": [41.8925, 12.4785],
+                      "nome": "Portico d'Ottavia",
+                      "descrizione_breve": "Anna era l'incarnazione della donna del popolo romana: fiera e pronta a lottare. Il Portico d'Ottavia rappresenta la sua anima verace.",
+                      "indicazioni_arrivo": "Tram 8 fermata Arenula/Cairoli, oppure a piedi da Largo Argentina.",
+                      "esperienza_culturale": {
+                        "musica": {
+                            "movimento": "L'Anima Popolare",
+                            "brano_completo": "portico_ottavia.mp3",
+                            "compositore": "Ambiente / L'Onorevole Angelina (1947)",
+                            "durata_sec": 120,
+                            "descrizione_musicale": "La voce di Anna squarcia il silenzio delle rovine. Un frammento audio in cui l'attrice difende con le unghie e con i denti la sua gente, mescolato al risveglio dei fornai storici del Ghetto. <br><br>🎬 <a href='https://youtube.com/clip/Ugkx3fkGGk5UBD4CWxeIBdPGY6XuK7pCMkSx?si=5I3tkFoLsOjoq126' target='_blank' style='color: #d9b382; font-weight: bold;'>Guarda la clip dell'Onorevole Angelina su YouTube</a>"
+                            },
+                        "letteratura": {
+                          "citazione": "Roma è una città di pietre live e di un popolo  che non si arrende mai.",
+                          "autore": "Pier Paolo Pasolini",
+                          "opera": "Scritti Corsari",
+                          "anno": 1975
+                        },
+                        "atmosfera": {
+                          "momento": "mattino",
+                          "luce": "radente sui ruderi",
+                          "suoni_ambiente": ["serrande che si alzano", "vociare", "sampietrini"],
+                          "temperatura_stimata": "15-18°C",
+                          "affollamento": "moderato",
+                          "emozione_target": "Resistenza, fierezza"
+                        }
+                      },
+                      "storia": "Il Portico d'Ottavia fu ricostruito in epoca severiana. È da sempre il cuore pulsante e popolare del Ghetto ebraico.",
+                      "curiosita": "Nonostante frequentasse i salotti, la Magnani sullo schermo era l'incarnazione assoluta della donna del popolo."
+                    },
+                    {
+                      "numero": 2,
+                      "poi_id": "fontana_naiadi",
+                      "orario_consigliato": "11:30",
+                      "momento_giornata": "pieno mattino",
+                      "durata_visita_min": 30,
+                      "coordinate": [41.9028, 12.4984],
+                      "nome": "Fontana delle Naiadi",
+                      "descrizione_breve": "Set di Risate di gioia (1960). In una scena iconica, la Magnani stanca e delusa si lava i piedi scalzi nell'immensa fontana.",
+                      "indicazioni_arrivo": "Dal Ghetto: camminata verso Via Nazionale fino a Piazza della Repubblica.",
+                      "esperienza_culturale": {
+                        "musica": {
+                          "movimento": "La Diva Solitaria",
+                          "brano_completo": "fontana_naiadi.mp3",
+                          "compositore": "Lelio Luttazzi / Ambiente",
+                          "durata_sec": 150,
+                          "descrizione_musicale": "L'acqua prepotente delle Naiadi fa da contrasto alla solitudine della diva. Nannarella si lava i piedi stanchi nella fontana, mentre Roma festeggia ignorando i suoi drammi."
+                        },
+                        "letteratura": {
+                          "citazione": "Le Naiadi lucenti sfidano la morale con la stessa disinvoltura con cui l'acqua sfida la gravità.",
+                          "autore": "Cronache dell'epoca",
+                          "opera": "Corriere",
+                          "anno": 1901
+                        },
+                        "atmosfera": {
+                          "momento": "pieno mattino",
+                          "luce": "brillante sull'acqua",
+                          "suoni_ambiente": ["traffico intenso", "getto d'acqua potente"],
+                          "temperatura_stimata": "20-23°C",
+                          "affollamento": "alto",
+                          "emozione_target": "Solitudine, grandezza"
+                        }
+                      },
+                      "storia": "Costruita da Papa Pio IX, assunse l'aspetto attuale nel 1901 con le statue di Rutelli.",
+                      "curiosita": "L'impatto di Anna col cinema internazionale le portò successo, ma non cancellò la sua profonda malinconia."
+                    },
+                    {
+                      "numero": 3,
+                      "poi_id": "palazzo_altieri",
+                      "orario_consigliato": "15:00",
+                      "momento_giornata": "primo pomeriggio",
+                      "durata_visita_min": 60,
+                      "coordinate": [41.8966, 12.4788],
+                      "nome": "Palazzo Altieri",
+                      "descrizione_breve": "Il suo vero rifugio. Nell'attico di questo palazzo barocco si isolava dalla Dolce Vita e curava decine di gatti randagi.",
+                      "indicazioni_arrivo": "Da P.za della Repubblica: Metro A Termini, poi Bus 40 a Piazza del Gesù.",
+                      "esperienza_culturale": {
+                        "musica": {
+                          "movimento": "Il Rifugio della Regina",
+                          "brano_completo": "palazzo_altieri.mp3",
+                          "compositore": "Ambiente / Intervista",
+                          "durata_sec": 180,
+                          "descrizione_musicale": "Il silenzio dell'attico. Gatti randagi nutriti sul terrazzo e un'intervista in cui confessa il bisogno di solitudine."
+                        },
+                        "letteratura": {
+                          "citazione": "Non togliermi neppure una ruga. Le ho pagate tutte care.",
+                          "autore": "Anna Magnani",
+                          "opera": "Intervista",
+                          "anno": 1965
+                        },
+                        "atmosfera": {
+                          "momento": "primo pomeriggio",
+                          "luce": "calda sui vicoli",
+                          "suoni_ambiente": ["traffico ovattato", "campane", "miagolii"],
+                          "temperatura_stimata": "25-28°C",
+                          "affollamento": "medio",
+                          "emozione_target": "Intimità, protezione"
+                        }
+                      },
+                      "storia": "Costruito per la famiglia di Papa Clemente X, è un capolavoro del barocco civile romano.",
+                      "curiosita": "L'attico della Magnani era famoso per le cene intime con intellettuali (come Pasolini) e come rifugio per i gatti."
+                    },
+                    {
+                      "numero": 4,
+                      "poi_id": "piazza_minerva",
+                      "orario_consigliato": "18:00",
+                      "momento_giornata": "tramonto",
+                      "durata_visita_min": 45,
+                      "coordinate": [41.8978, 12.4778],
+                      "nome": "Piazza della Minerva",
+                      "descrizione_breve": "Il palcoscenico del suo addio. Nel 1973 la chiesa accolse i suoi funerali: un oceano di persone bloccò Roma per piangerla.",
+                      "indicazioni_arrivo": "Da Palazzo Altieri: 5 minuti a piedi.",
+                      "esperienza_culturale": {
+                        "musica": {
+                          "movimento": "L'Abbraccio Finale",
+                          "brano_completo": "piazza_minerva.mp3",
+                          "compositore": "Archivio Luce",
+                          "durata_sec": 200,
+                          "descrizione_musicale": "Audio del Cinegiornale '73. Un applauso oceanico riempie la piazza all'uscita del feretro. Chiude con l'ultimo saluto: 'No, so' stanca. Ciao. Buonanotte'."
+                        },
+                        "letteratura": {
+                          "citazione": "Ha gridato, ha pianto, ha riso, ha amato come nessuna. Roma non perde mai i suoi figli più veri.",
+                          "autore": "Eduardo De Filippo",
+                          "opera": "Ricordo",
+                          "anno": 1973
+                        },
+                        "atmosfera": {
+                          "momento": "tramonto",
+                          "luce": "dorata, ombre lunghe",
+                          "suoni_ambiente": ["brusio turisti", "rintocchi campane"],
+                          "temperatura_stimata": "18-22°C",
+                          "affollamento": "medio-alto",
+                          "emozione_target": "Gratitudine, catarsi"
+                        }
+                      },
+                      "storia": "L'unica chiesa gotica di Roma. L'elefantino fu disegnato dal Bernini.",
+                      "curiosita": "L'applauso scrosciante al feretro divenne un precedente: da quel giorno, applaudire ai funerali in Italia è segno di amore."
+                    }
+                  ],
+                  "consigli_pratici": [
+                    "Portare fazzoletti per l'emozionante audio finale",
+                    "Scarpe comode obbligatorie (3.5 km a piedi)"
+                  ]
+                }
+            ];
+        }
+        
+        function renderItinerariCards() {
+            const container = document.getElementById('itinerari-container');
+            container.innerHTML = '';
+            
+            itinerariData.forEach(itinerario => {
+                const card = document.createElement('div');
+                card.className = 'itinerario-card';
+                card.onclick = () => startItinerario(itinerario.id);
+                
+                card.innerHTML = `
+                    <div class="card-image" style="background-image: url('https://i.pinimg.com/736x/70/cf/4f/70cf4ff1f7d54be96032309e181ad8cf.jpg')">                        
+                        <div class="card-badge">${itinerario.tema || 'Cinema'}</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>${itinerario.nome}</h3>
+                        
+                        <p class="card-subtitle">${itinerario.sottotitolo || ''}</p>
+                        <p class="card-description">${itinerario.descrizione}</p>
+                        
+                        <div class="card-stats">
+                            <div class="stat">
+                                <div class="stat-value">⏳ ${itinerario.durata_totale_ore}h</div>
+                                <div class="stat-label">Durata</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">🎥 ${itinerario.tappe.length}</div>
+                                <div class="stat-label">Tappe</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">👣 ${itinerario.distanza_totale_km}km</div>
+                                <div class="stat-label">Distanza</div>
+                            </div>
+                        </div>
+                        
+                        <button class="card-button">Inizia Passeggiata</button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function startItinerario(itinerarioId) {
+            currentItinerario = itinerariData.find(it => it.id === itinerarioId);
+            if (!currentItinerario) return;
+            
+            currentTappaIndex = 0;
+            
+            showView('itinerary');
+            initMap();
+            renderTimeline();
+            loadTappa(0);
+        }
+        
+        function showView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`${viewName}-view`).classList.add('active');
+            
+            const backBtn = document.getElementById('back-to-itinerary-btn');
+            backBtn.style.display = viewName === 'itinerary' ? 'inline-block' : 'none';
+        }
+        
+        function initMap() {
+            if (map) map.remove();
+            
+            map = L.map('map').setView([41.9028, 12.4964], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            
+            drawRoute();
+            addMarkers();
+        }
+        
+        function drawRoute() {
+            const coordinates = currentItinerario.tappe.map(t => t.coordinate);
+            
+            if (routeLine) map.removeLayer(routeLine);
+            
+            routeLine = L.polyline(coordinates, {
+                color: '#8b3a3a',
+                weight: 5,
+                opacity: 0.8,
+                dashArray: '10, 15',
+                lineJoin: 'round'
+            }).addTo(map);
+            
+            map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+        }
+        
+        function addMarkers() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            
+            currentItinerario.tappe.forEach((tappa, index) => {
+                const icon = momentIcons[tappa.momento_giornata] || '📍';
+                
+                const marker = L.marker(tappa.coordinate, {
+                    icon: L.divIcon({
+                        html: `<div style="font-size: 2em; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">${icon}</div>`,
+                        className: 'custom-marker',
+                        iconSize: [40, 40]
+                    })
+                }).addTo(map);
+                
+                marker.bindPopup(`<b style="color:#8b3a3a;">Tappa ${tappa.numero}</b><br><b>${tappa.nome}</b>`);
+                marker.on('click', () => loadTappa(index));
+                
+                markers.push(marker);
+            });
+        }
+        
+        function renderTimeline() {
+            const container = document.getElementById('timeline-items');
+            container.innerHTML = '';
+            
+            currentItinerario.tappe.forEach((tappa, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                
+                if (index < currentTappaIndex) item.classList.add('completed');
+                else if (index === currentTappaIndex) item.classList.add('current');
+                else item.classList.add('upcoming');
+                
+                item.onclick = () => loadTappa(index);
+                
+                item.innerHTML = `
+                    <div class="timeline-icon">${momentIcons[tappa.momento_giornata] || '📍'}</div>
+                    <div class="timeline-time">${tappa.orario_consigliato}</div>
+                    <div class="timeline-name">${tappa.nome}</div>
+                    <div class="timeline-duration">${tappa.durata_visita_min} min</div>
+                `;
+                
+                container.appendChild(item);
+            });
+            
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const progress = ((currentTappaIndex + 1) / currentItinerario.tappe.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+        }
+        
+        function loadTappa(index) {
+            currentTappaIndex = index;
+            const tappa = currentItinerario.tappe[index];
+            
+            document.getElementById('tappa-numero').textContent = `0${tappa.numero}`;
+            document.querySelector('#tappa-nome h2').textContent = tappa.nome;
+            document.querySelector('#tappa-nome .descrizione-breve').textContent = tappa.descrizione_breve || '';
+            document.querySelector('#tappa-orario .time').textContent = tappa.orario_consigliato;
+            document.querySelector('#tappa-orario .moment').textContent = tappa.momento_giornata;
+            
+            renderTappaContent(tappa);
+            renderTimeline();
+            
+            map.setView(tappa.coordinate, 16, { animate: true });
+            markers[index].openPopup();
+            
+            document.querySelector('.nav-btn.prev').disabled = index === 0;
+            document.querySelector('.nav-btn.next').disabled = index === currentItinerario.tappe.length - 1;
+            
+            // Aggiorna testo bottone finale
+            if(index === currentItinerario.tappe.length - 1) {
+                 document.querySelector('.nav-btn.next').textContent = 'Fine Passeggiata';
+            } else {
+                 document.querySelector('.nav-btn.next').textContent = 'Tappa Successiva →';
+            }
+        }
+        
+        function renderTappaContent(tappa) {
+            const container = document.getElementById('tappa-content');
+            container.innerHTML = '';
+            
+            if (tappa.storia || tappa.curiosita) {
+                const storiaSec = document.createElement('div');
+                storiaSec.className = 'esperienza-section';
+                storiaSec.innerHTML = `
+                    <h3>🎞️ Storia e Curiosità</h3>
+                    ${tappa.storia ? `<p><strong>Storia:</strong> ${tappa.storia}</p>` : ''}
+                    ${tappa.curiosita ? `<p style="margin-top: 10px;"><strong>Curiosità:</strong> ${tappa.curiosita}</p>` : ''}
+                `;
+                container.appendChild(storiaSec);
+            }
+            
+            if (tappa.esperienza_culturale) {
+                const exp = tappa.esperienza_culturale;
+                
+            if (exp.musica) {
+                const musicDiv = document.createElement('div');
+                musicDiv.className = 'music-player';
+                
+                // Gestione VIDEO per Tappa 1, 2 e 4
+                if (tappa.numero === 1 || tappa.numero === 2 || tappa.numero === 4) {
+                    let playerVideo = "";
+                    
+                    // Se c'è YouTube (Tappa 2 e 4)
+                    if (exp.musica.youtube_url) {
+                        playerVideo = `<iframe width="100%" height="220" src="${exp.musica.youtube_url}" frameborder="0" allowfullscreen style="border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-top: 10px;"></iframe>`;
+                    } 
+                    // Se c'è il file locale (Tappa 1)
+                    else if (exp.musica.video) {
+                        playerVideo = `<video width="100%" height="auto" controls style="border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-top: 10px;"><source src="${exp.musica.video_url}" type="video/mp4">Il tuo browser non supporta il video.</video>`;
+                    }
+
+                    musicDiv.innerHTML = `
+                        <h4>🎬 Documento Storico: ${exp.musica.movimento}</h4>
+                        ${playerVideo}
+                        <div class="music-description" style="margin-top:15px;">
+                            ${exp.musica.descrizione_musicale}
+                        </div>`;
+                } else {
+                    // Player AUDIO solo per Tappa 3 (Palazzo Altieri)
+                    musicDiv.innerHTML = `
+                        <h4>🎙️ La voce di Anna: ${exp.musica.movimento}</h4>
+                        <audio controls style="width: 100%; margin-top: 10px;">
+                            <source src="${exp.musica.audio_url}" type="audio/x-m4a">
+                            Il tuo browser non supporta l'audio.
+                        </audio>
+                        <div class="music-description" style="margin-top:15px;">
+                            ${exp.musica.descrizione_musicale}
+                        </div>`;
+                }
+                container.appendChild(musicDiv);
+            }
+                                
+                                if (exp.letteratura) {
+                                    const litDiv = document.createElement('div');
+                                    litDiv.className = 'citazione-box';
+                                    litDiv.innerHTML = `
+                                        <div class="citazione-text">${exp.letteratura.citazione}</div>
+                                        <div class="citazione-author">— ${exp.letteratura.autore}, <em>${exp.letteratura.opera}</em> (${exp.letteratura.anno})</div>
+                                    `;
+                                    container.appendChild(litDiv);
+                                }
+                                
+                                if (exp.atmosfera) {
+                                    const atmDiv = document.createElement('div');
+                                    atmDiv.className = 'esperienza-section';
+                                    atmDiv.innerHTML = `
+                                        <h3>🌆 Atmosfera del Luogo</h3>
+                                        <div class="atmosfera-grid">
+                                            <div class="atmosfera-item">
+                                                <div class="icon">🎬</div>
+                                                <div class="label">Luce</div>
+                                                <div class="value">${exp.atmosfera.luce || 'N/A'}</div>
+                                            </div>
+                                            <div class="atmosfera-item">
+                                                <div class="icon">🌡️</div>
+                                                <div class="label">Temperatura</div>
+                                                <div class="value">${exp.atmosfera.temperatura_stimata || 'N/A'}</div>
+                                            </div>
+                                            <div class="atmosfera-item">
+                                                <div class="icon">🗣️</div>
+                                                <div class="label">Affollamento</div>
+                                                <div class="value">${exp.atmosfera.affollamento || 'N/A'}</div>
+                                            </div>
+                                            <div class="atmosfera-item">
+                                                <div class="icon">❤️</div>
+                                                <div class="label">Emozione</div>
+                                                <div class="value">${exp.atmosfera.emozione_target || 'N/A'}</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                    container.appendChild(atmDiv);
+                                }
+                            }
+                        }
+        
+        function previousTappa() {
+            if (currentTappaIndex > 0) {
+                loadTappa(currentTappaIndex - 1);
+            }
+        }
+        
+        function nextTappa() {
+            if (currentTappaIndex < currentItinerario.tappe.length - 1) {
+                loadTappa(currentTappaIndex + 1);
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
